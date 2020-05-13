@@ -1,0 +1,9 @@
+
+uXMS - minor bug fixes:
+  proper HISTORY_VAR configuration was reporting unhandled configuration 
+  proper COLOR_MAP parameter was reporting unhandled configuration
+
+moos-ivp/scripts/GenMOOSApp - 
+  Modified to reflect the MOOS build structure
+
+
