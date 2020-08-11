@@ -1,8 +1,8 @@
 /*****************************************************************/
 /*    NAME: Michael Benjamin                                     */
 /*    ORGN: Dept of Mechanical Eng / CSAIL, MIT Cambridge MA     */
-/*    FILE: XYPolygonExpander.h                                  */
-/*    DATE: Sep 7th, 2019                                        */
+/*    FILE: XYRangePulse.h                                       */
+/*    DATE: Feb 4th 2011                                         */
 /*                                                               */
 /* This file is part of IvP Helm Core Libs                       */
 /*                                                               */
@@ -22,54 +22,53 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#ifndef XY_POLYGON_EXPANDER_HEADER
-#define XY_POLYGON_EXPANDER_HEADER
 
-#include <vector>
+#ifndef XY_RANGE_PULSE_HEADER
+#define XY_RANGE_PULSE_HEADER
+
 #include <string>
-#include "XYPolygon.h"
+#include <vector>
+#include "XYObject.h"
 
-class XYPolygonExpander {
+class XYRangePulse : public XYObject {
 public:
-  XYPolygonExpander();
-  ~XYPolygonExpander() {}
+  XYRangePulse();
+  XYRangePulse(double x, double y);
+  virtual ~XYRangePulse() {}
 
-  bool      setPoly(XYPolygon poly);
-  void      setDegreeDelta(double);
-  void      setVertexProximityThresh(double);
-  
-  XYPolygon getBufferPoly(double buff);
-  
+  void   set_x(double v)          {m_x=v; m_x_set=true;}
+  void   set_y(double v)          {m_y=v; m_y_set=true;}
+  void   set_rad(double);
+  void   set_linger(double);
+  void   set_fill(double);
+  void   set_fill_invariant(bool v) {m_fill_invariant=v;}
+
+  double get_x()    const         {return(m_x);}
+  double get_y()    const         {return(m_y);}
+  double get_radius()  const      {return(m_rad);}
+  double get_linger() const       {return(m_linger);}
+  double get_fill() const         {return(m_fill);}
+  double get_fill(double timestamp) const;
+
+  bool   valid() const;
+
+  std::string get_spec(std::string s="") const;
+
+  std::vector<double> get_circle(double time, unsigned int pts=180) const;
+
+ protected:
+  void initialize();
+
 protected:
-  bool      expandSegments();
-  bool      buildCorners();
-  bool      buildNewPoly();
-  void      clear();
-  
-private: // Config variables
-  
-  XYPolygon m_poly_orig;
-  XYPolygon m_poly_buff;
+  double    m_x;
+  double    m_y;
+  double    m_rad;
+  double    m_linger;
 
-  double    m_buff;
-  double    m_deg_delta;
-  double    m_vertex_proximity_thresh;
+  bool      m_x_set;
+  bool      m_y_set;
 
-private: // State variables
-
-  // Variables for holding the temporary edge vertices
-  // Index aligns with indices of poly_orig
-  std::vector<double> m_px1;
-  std::vector<double> m_py1;
-  std::vector<double> m_px2;
-  std::vector<double> m_py2;
-  
-  // Variables for holding the temporary corner vertices
-  // Outer Index aligns with indices of poly_orig
-  std::vector<std::vector<double> > m_ipx;
-  std::vector<std::vector<double> > m_ipy;
+  double    m_fill;
+  bool      m_fill_invariant;
 };
-
 #endif
-
